@@ -1,3 +1,3 @@
-<p><em>&copy; Lycée Rabelais</em></p>
+<!-- A remplir nous même -->
 </body>
 </html>
