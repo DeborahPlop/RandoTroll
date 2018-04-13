@@ -5,7 +5,13 @@ Class RelanceMail extends CI_Controller
 {
     public function AfficherTableau()
     {
-        //Aller chercher dans la BDD pour afficher le nombre de gens à relancer et le manque d'argent ? 
+       $this->load->view('AdminInscription\RelanceMail.php'); 
+
+    }
+
+    public function Envoyer()
+    {
+        //Envoie du formulaire => mail
 
     }
 }
