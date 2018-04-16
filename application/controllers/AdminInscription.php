@@ -15,7 +15,7 @@ Class AdminInscription extends CI_Controller
 
     public function RelanceImpayes()
     {
-        $DonneesInjectees['lesgrps'] = $this->ModelSInscrire->retournerImpayes();
+        $DonneesInjectees['Equipes'] = $this->ModelSInscrire->retournerImpayes();
          var_dump($DonneesInjectees);
         $this->load->view('templates/Entete');
         $this->load->view('AdminInscription\RelanceImpayes.php',$DonneesInjectees); 
