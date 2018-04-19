@@ -1,3 +1,3 @@
-<!-- A remplir nous même -->
+<p>Pied de page</p>
 </body>
 </html>

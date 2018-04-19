@@ -12,11 +12,12 @@
             $this->db->select_max('Annee');
             $this->db->from('Annee');
             $requete = $this->db->get();
-            $MAX = $requete->result();            
+            $MAX=$requete->result_array();
+            $AnneeMax= $MAX['0']['Annee'];
 
             $this->db->select('*');
             $this->db->from('Annee');
-            $this->db->where('Annee',$MAX);
+            $this->db->where('Annee',$AnneeMax);
             $requete = $this->db->get();
             $Donnees['Annee'] = $requete->result_array();
 
@@ -34,11 +35,11 @@
                 $Age = (int) ((time() - $d) / 3600 / 24 / 365.25);
                 //echo $Age."<BR>";
                 
-
-                // if($Age <)
-                // {
-
-                // }
+                
+                if($Age < $Donnees['Annee']['0']['LIMITEAGE']) 
+                {
+                     //$Solde = $Solde + ($Donnees['Annee']['0']['TARIFREPASENFANT']*$unMembre[])
+                }
             endforeach; 
             
         }

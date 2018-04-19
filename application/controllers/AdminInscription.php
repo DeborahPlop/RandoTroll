@@ -25,9 +25,9 @@ Class AdminInscription extends CI_Controller
            $Somme =  $this->ModelMembreDe->sommeDueParEquipe($uneEquipe['NOEQUIPE']); 
            //echo $Somme;
         endforeach;
-        var_dump($DonneesInjectees);
+        //var_dump($DonneesInjectees); //la somme de toutes les données précédentes. 
         $this->load->view('templates/Entete');
-        $this->load->view('AdminInscription\RelanceImpayes.php',$DonneesInjectees); 
+        $this->load->view('AdminInscription/RelanceImpayes',$DonneesInjectees); 
         $this->load->view('templates/PiedDePage');
     }
 
