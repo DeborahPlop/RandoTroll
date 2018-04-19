@@ -9,11 +9,10 @@
         
         public function sommeDueParEquipe($noEquipe) 
         {
-            // $this->db->select('max(Annee)');
-            // $this->db->from('Annee');
-            // $requete = $this->db->get();
-            // $MAX = $requete->result_array();
-            // echo $MAX;
+            $this->db->select_max('Annee');
+            $this->db->from('Annee');
+            $requete = $this->db->get();
+            $MAX = $requete->result();            
 
             $this->db->select('*');
             $this->db->from('Annee');
