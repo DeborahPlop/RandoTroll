@@ -17,7 +17,7 @@
 
             $this->db->select('*');
             $this->db->from('Annee');
-            $this->db->where('Annee',$AnneeMax);
+            $this->db->where('Annee',$AnneeMax); //date('Y')
             $requete = $this->db->get();
             $Donnees['Annee'] = $requete->result_array();
 
@@ -27,21 +27,30 @@
             $this->db->where('m.noequipe', $noEquipe);
             $requete = $this->db->get();
             $Donnees['Membres'] = $requete->result_array();
-            var_dump($Donnees);
+            //var_dump($Donnees);
+            $Solde = 0;
             foreach($Donnees['Membres'] as $unMembre):
-                //echo $unMembre['NOM']."<BR>";
+                //echo "Nom : ".$unMembre['NOM']."<BR>";
                 $d = strtotime($unMembre['DATEDENAISSANCE']);
                 //echo strftime('%a %d %b %Y', $d).' > ';
                 $Age = (int) ((time() - $d) / 3600 / 24 / 365.25);
-                //echo $Age."<BR>";
+                //echo "Age :".$Age."<BR>";
                 
                 
                 if($Age < $Donnees['Annee']['0']['LIMITEAGE']) 
                 {
-                     //$Solde = $Solde + ($Donnees['Annee']['0']['TARIFREPASENFANT']*$unMembre[])
+                    $Solde = $Solde + $Donnees['Annee']['0']['TARIFINSCRIPTIONENFANT']+($Donnees['Annee']['0']['TARIFREPASENFANT']*$unMembre['REPASSURPLACE']);
                 }
+                else 
+                {
+                    $Solde = $Solde + $Donnees['Annee']['0']['TARIFINSCRIPTIONADULTE']+($Donnees['Annee']['0']['TARIFREPASADULTE']*$unMembre['REPASSURPLACE']);
+                } 
+                //echo "Somme : ".$Solde."<BR>";
             endforeach; 
+
+            //echo "Somme totale : ".$Solde. "<BR><BR>";
             
+            return $Solde;
         }
 
     }
