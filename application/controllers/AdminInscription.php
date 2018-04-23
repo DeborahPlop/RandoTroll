@@ -11,6 +11,7 @@ Class AdminInscription extends CI_Controller
        $this->load->library("pagination");
        $this->load->model('ModelSInscrire');
        $this->load->model('ModelMembreDe');
+       $this->load->library('email');
         // chargement modèle, obligatoire
        //$this->load->model('');
     }
@@ -23,6 +24,14 @@ Class AdminInscription extends CI_Controller
             //echo('Coucou tu as réussi à faire un submit correcte');
             $DonneesInjectees['Equipes'] = $this->ModelSInscrire->retournerImpayes();
             var_dump($DonneesInjectees);
+            $this->email->from('adresse@gmail.com', 'Votre nom');
+            $this->email->to('adresse@destination.com'); 
+            $this->email->subject('Le sujet de votre mail');
+            $this->email->message('Le message de votre mail');	
+            if (!$this->email->send())
+            {
+                $this->email->print_debugger();
+            }
         }
         else
         {
@@ -31,7 +40,7 @@ Class AdminInscription extends CI_Controller
             $this->load->library('table');
             $this->load->helper('form');
             $i = 0;
-            foreach( $DonneesInjectees['Equipes'] as $uneEquipe):
+            foreach($DonneesInjectees['Equipes'] as $uneEquipe):
             $Somme =  $this->ModelMembreDe->sommeDueParEquipe($uneEquipe['NOEQUIPE']); 
             $DonneesInjectees['Somme'][$i]=array($uneEquipe['NOEQUIPE'],$Somme);
                 $i += 1;
