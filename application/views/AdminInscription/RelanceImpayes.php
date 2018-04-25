@@ -6,6 +6,9 @@
     $i = 0;
     echo form_open('AdminInscription/RelanceImpayes');
     
+    echo form_textarea('mail', '',array('required'=>'required'))."<BR><BR>";
+
+
     foreach ($Equipes as $uneEquipe):
         $A_Payer = $Somme[$i][1] - $uneEquipe['MONTANTPAYE'];
         $Format_APayer = number_format($A_Payer, 2);
@@ -18,11 +21,8 @@
     $this->table->set_template($Style);
 
     echo $this->table->generate();
-    echo 
-    form_submit('submit', 'Envoyer');
+    echo "<BR>".form_submit('submit', 'Envoyer');
     
-    
-
     echo form_close();
 ?>
 

@@ -8,10 +8,13 @@ Class AdminInscription extends CI_Controller
        parent::__construct();
        $this->load->helper('url');
        $this->load->helper('assets'); // helper 'assets' ajouté a Application
-       $this->load->library("pagination");
-       $this->load->model('ModelSInscrire');
-       $this->load->model('ModelMembreDe');
+       //$this->load->library("pagination");
+       //$this->load->model('ModelSInscrire');
+       //this->load->model('ModelMembreDe');
        $this->load->library('email');
+      // $this->load->model('ModelSInscrire');
+       $this->load->model('ModelImpayes');
+       
         // chargement modèle, obligatoire
        //$this->load->model('');
     }
@@ -22,27 +25,56 @@ Class AdminInscription extends CI_Controller
         {
             //Mailing
             //echo('Coucou tu as réussi à faire un submit correcte');
-            $DonneesInjectees['Equipes'] = $this->ModelSInscrire->retournerImpayes();
-            var_dump($DonneesInjectees);
-            $this->email->from('adresse@gmail.com', 'Votre nom');
-            $this->email->to('adresse@destination.com'); 
-            $this->email->subject('Le sujet de votre mail');
-            $this->email->message('Le message de votre mail');	
-            if (!$this->email->send())
-            {
-                $this->email->print_debugger();
-            }
+            $Message = $this->input->post('mail');
+            $DonneesInjectees['Equipes'] = $this->ModelImpayes->retournerImpayes();
+            //echo $Message;
+            
+            $DonnesUtiles = $this->ModelImpayes->AnneeEnCours();
+            $DateFin = $DonnesUtiles[0]['DATECLOTUREINSCRIPTION'];
+            $DateFin = date_create($DateFin);
+            $DateFin = date_format($DateFin,"d/m/Y");
+           
+            // var_dump($DonnesUtiles);
+            // //var_dump($DonneesInjectees);
+            foreach($DonneesInjectees['Equipes'] as $uneEquipe) : 
+                //echo($uneEquipe['MAIL']);
+                $Somme =  $this->ModelImpayes->sommeDueParEquipe($uneEquipe['NOEQUIPE']) - $uneEquipe['MONTANTPAYE'];
+                $Somme = number_format($Somme,2);
+                
+                //$DateFin = $DonnesUtiles[]
+                $this->email->from('mailing.randotroll@gmail.com');
+                $this->email->to($uneEquipe['MAIL']); 
+                $this->email->subject('Reste a payer');
+                $this->email->message($Message."\n"."vous nous devez la somme de : ".$Somme."€ à regler avant le : ".$DateFin."
+                Merci
+                ");
+                
+                if (!$this->email->send())
+                {
+                    $this->email->print_debugger();
+                    echo "Error";
+                }
+                else 
+                {
+                        
+                }
+
+            endforeach;
         }
+
         else
         {
-            $DonneesInjectees['Equipes'] = $this->ModelSInscrire->retournerImpayes();
+            //$DonneesInjectees['Equipes'] = $this->ModelSInscrire->retournerImpayes();
+            $DonneesInjectees['Equipes'] = $this->ModelImpayes->retournerImpayes();
+            //$DonneesInjectees['Equipes'] = $this->ModelImpayes->retournerImpayes("-1");
             
             $this->load->library('table');
             $this->load->helper('form');
             $i = 0;
             foreach($DonneesInjectees['Equipes'] as $uneEquipe):
-            $Somme =  $this->ModelMembreDe->sommeDueParEquipe($uneEquipe['NOEQUIPE']); 
-            $DonneesInjectees['Somme'][$i]=array($uneEquipe['NOEQUIPE'],$Somme);
+                $Somme =  $this->ModelImpayes->sommeDueParEquipe($uneEquipe['NOEQUIPE']);
+                //$Somme =  $this->ModelMembreDe->sommeDueParEquipe($uneEquipe['NOEQUIPE']); 
+                $DonneesInjectees['Somme'][$i]=array($uneEquipe['NOEQUIPE'],$Somme);
                 $i += 1;
             endforeach;
             //var_dump($DonneesInjectees['Somme']);
@@ -53,16 +85,6 @@ Class AdminInscription extends CI_Controller
         }
     }
 
-    public function Envoyer()
-    {
-        //Envoie du formulaire => mail
-
-    }
-    
-    public function CalculAge($dateNaissance)
-    {
-
-    }
 }
 
 ?>
