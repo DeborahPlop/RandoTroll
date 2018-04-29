@@ -35,7 +35,12 @@ Class AdminInscription extends CI_Controller
             $DateFin = date_format($DateFin,"d/m/Y");
            
             // var_dump($DonnesUtiles);
+
             // //var_dump($DonneesInjectees);
+            $reussite = 0 ;
+            $i = 0;
+            $Mails;
+            $j=0;            
             foreach($DonneesInjectees['Equipes'] as $uneEquipe) : 
                 //echo($uneEquipe['MAIL']);
                 $Somme =  $this->ModelImpayes->sommeDueParEquipe($uneEquipe['NOEQUIPE']) - $uneEquipe['MONTANTPAYE'];
@@ -53,13 +58,31 @@ Class AdminInscription extends CI_Controller
                 {
                     $this->email->print_debugger();
                     echo "Error";
+                    if($reussite != 0)
+                    {
+                        $reussite -= 1;
+                    }
+                    $Mails[$j] = $uneEquipe['MAIL'];
+                    $j += 1;                    
                 }
                 else 
                 {
-                        
+                    $reussite += 1;
                 }
-
+                $i += 1 ;
             endforeach;
+                $Données =  array
+                (
+                    "Reussite" => $reussite,
+                    "TotalEnvois" => $i,
+                    "MailsErro" => $Mails
+                );
+                var_dump($Données);
+                $this->load->view('templates/Entete');
+                $this->load->view('AdminInscription/MailingReussi',$Données); 
+                $this->load->view('templates/PiedDePage');  
+            
+            
         }
 
         else
