@@ -1,5 +1,6 @@
 <html>
 <?php 
+//Randotroll0!
 
 Class AdminInscription extends CI_Controller 
 {
