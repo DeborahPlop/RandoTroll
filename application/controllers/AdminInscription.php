@@ -51,8 +51,8 @@ Class AdminInscription extends CI_Controller
                 $this->email->from('mailing.randotroll@gmail.com');
                 $this->email->to($uneEquipe['MAIL']); 
                 $this->email->subject('Reste a payer');
-                $this->email->message($Message."\n"."vous nous devez la somme de : ".$Somme."€ à regler avant le : ".$DateFin."
-                Merci
+                $this->email->message($Message."\n"."Vous nous devez la somme de : ".$Somme."€ à regler avant le : ".$DateFin."\n".
+                "Merci
                 ");
                 
                 if (!$this->email->send())
@@ -76,9 +76,9 @@ Class AdminInscription extends CI_Controller
                 (
                     "Reussite" => $reussite,
                     "TotalEnvois" => $i,
-                    "MailsErro" => $Mails
+                //    "MailsErro" => $Mails
                 );
-                var_dump($Données);
+                //var_dump($Données);
                 $this->load->view('templates/Entete');
                 $this->load->view('AdminInscription/MailingReussi',$Données); 
                 $this->load->view('templates/PiedDePage');  
