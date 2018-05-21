@@ -93,7 +93,9 @@ Class AdminInscription extends CI_Controller
             //$DonneesInjectees['Equipes'] = $this->ModelImpayes->retournerImpayes("-1");
             
             $this->load->library('table');
+
             $this->load->helper('form');
+            $this->load->library('form_validation');
             $i = 0;
             foreach($DonneesInjectees['Equipes'] as $uneEquipe):
                 $Somme =  $this->ModelImpayes->sommeDueParEquipe($uneEquipe['NOEQUIPE']);
@@ -107,6 +109,13 @@ Class AdminInscription extends CI_Controller
             $this->load->view('AdminInscription/RelanceImpayes',$DonneesInjectees); 
             $this->load->view('templates/PiedDePage');
         }
+    }
+
+    public function MiseAJourImpayes() 
+    {
+       $EquipeAModifier = $this->input->post('submit');
+        var_dump($EquipeAModifier);
+        
     }
 
 }
