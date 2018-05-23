@@ -114,7 +114,7 @@ Class AdminInscription extends CI_Controller
     public function MiseAJourImpayes($noEquipe) 
     {
         echo $noEquipe;
-        
+        $Equipe = "";
 
 
 
