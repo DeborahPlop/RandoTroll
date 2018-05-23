@@ -1,8 +1,7 @@
 <html>
 <head>
-<title>Randotroll</title>
-
+<title>Accueil</title>
 </head>
 <body>
+<?php echo "dans l'entete"; ?>
 
- <p>'entête'</p>
