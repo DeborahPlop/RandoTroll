@@ -9,34 +9,21 @@ class ModelImpayes extends CI_Model
 
     public function retournerImpayes() 
     {
-       
-            $this->db->select('*');
-            $this->db->from('equipe e');
-            $this->db->join('participant p ','p.noparticipant=e.nopar_responsable');            
-            $this->db->join('responsable r','e.nopar_responsable=r.noparticipant');
-            $this->db->join('sinscrire s','s.noequipe = e.noequipe');
-            $this->db->where('datevalidation', null);
-            $requete = $this->db->get();
-            return $requete->result_array();
+        
+        $this->db->select('*');
+        $this->db->from('equipe e');
+        $this->db->join('participant p ','p.noparticipant=e.nopar_responsable');            
+        $this->db->join('responsable r','e.nopar_responsable=r.noparticipant');
+        $this->db->join('sinscrire s','s.noequipe = e.noequipe');
+        $this->db->where('datevalidation', null);
+        $requete = $this->db->get();
+        return $requete->result_array();
         
     }
 
     public function sommeDueParEquipe($noEquipe) 
-        {
-            // $this->db->select_max('Annee');
-            // $this->db->from('Annee');
-            // $requete = $this->db->get();
-            // $MAX=$requete->result_array();
-            // $AnneeMax= $MAX['0']['Annee'];
-
-            // $AnneeMax = date('Y');
-
-            // $this->db->select('*');
-            // $this->db->from('Annee');
-            // $this->db->where('Annee',$AnneeMax); //date('Y')
-            // $requete = $this->db->get();
-            // $Donnees['Annee'] = $requete->result_array();
-
+    {  
+        
             $Donnees['Annee'] = $this->AnneeEnCours();
 
             $this->db->select('*');
@@ -66,7 +53,7 @@ class ModelImpayes extends CI_Model
             endforeach; 
             //echo "Somme totale : ".$Solde. "<BR><BR>";
             return $Solde;
-        }
+    }
 
         public function AnneeEnCours()
         {
