@@ -7,6 +7,7 @@ class Visiteur extends CI_Controller {
       $this->load->helper('url');
       $this->load->helper('assets'); // helper 'assets' ajouté a Application
       $this->load->library("pagination");
+      $this->load->model('ModelSInscrire');
       //  $this->load->library('session');
     //  if ($this->session->statut==0) // 0 : statut visiteur
     //  {
@@ -23,43 +24,72 @@ class Visiteur extends CI_Controller {
      
      $this->load->view('templates/PiedDePage');
    }
-  public function sInscrire()
-  {
-    $DonneesInjectees['TitreDeLaPage'] = 'S\'inscrire';
-    
-    if ($this->form_validation->run() === FALSE)
-    {   // formulaire non validé, on renvoie le formulaire
+   public function sInscrire()
+   {
+     //$plop=1;
+      $DonneesInjectees['Titre de la page']='Inscription';
+     if ( $this->input->post('submit'))
+     {
+    $donneesAInserer = array(
+      //'noEquipe' => $this->input->$plop,
+      'mail' => $this->input->post('mail'),
+      'motdepasse' => $this->input->post('mdp'),
+      'telportable' => $this->input->post('tel'));
+
+      $this->ModelSInscrire->Inscription($donneesAInserer); // appel du modèle
+      //$this->load->view('Visiteur/loadAccueil');
+      //$this->load->view('administrateur/insertionReussie');
+    }else{
       $this->load->view('templates/Entete');
-      $this->load->view('Visiteur/sInscrire', $DonneesInjectees);
+      $this->load->view('Visiteur/sInscrire',$DonneesInjectees);
       $this->load->view('templates/PiedDePage');
     }
-    else
+   }
+  public  function index()
+  {
+    if(isset($_POST['Valider l\'inscription'])){
+    
+  }
+    //Including validation library
+    $this->load->library('form_validation');
+    $this->form_validation->set_error_delimiters('<div class="error">', '</div>');
+    //Validating Name Field
+    $this->form_validation->set_rules('nomequipe', 'Nom de l\'equipe', 'required');
+      
+    //Validating Email Field
+    $this->form_validation->set_rules('mail', 'Email d\'identification:', 'required|valid_email');
+      
+    //Validating Mobile no. Field
+    $this->form_validation->set_rules('tel', 'Téléphone du responsable', 'required|regex_match[/^[0-9]{10}$/]');
+      
+    //Validating Password Field
+    $this->form_validation->set_rules('mdp', 'Mot de Passe', 'required|min_length[8]|max_length[15]');
+      
+    if ($this->form_validation->run() == FALSE) 
     {
-      $mdp = $this->input->post('mdp');
-      echo $mdp;
-      $confmdp = $this->input->post('confmdp');
-      echo $confmdp;
-      if ($mdp == $confmdp)
-          {
-            echo("MERDE");
-            //$this->load->view('Visiteur/loadAccueil');
-          }
-      else {
-        echo 'ICI';
-        $donneesAInserer = array(
-          'noEquipe' => $this->input->post('nomequipe'),
-          'mail' => $this->input->post('mail'),
-          'motdepasse' => $this->input->post('mdp'),
-          'telportable' => $this->input->post('tel'));
-
-          // $this->ModeleArticle->insererUnArticle($donneesAInserer); // appel du modèle
-          $this->load->view('Visiteur/loadAccueil');
-          $this->load->helper('url'); // helper chargé pour utilisation de site_url (dans la vue)
-          $this->load->model('ModelSInscrire/Inscription');
-          //$this->load->view('administrateur/insertionReussie');
-      }
-    }
-  } // function sinscrire
+      echo ('pas run');
+      $this->load->view('Visiteur/sInscrire');
+    } else 
+    {
+      echo ('run');
+      $plop=1;
+      //Setting values for tabel columns
+      $data = array(
+      'noparticipant'=>$this-> input->$plop, // test apres faire noparticipant +=1
+      //'noparticipant' => $this->input->post('nomequipe'), le nomequipe est dans la table equipe
+      'mail' => $this->input->post('mail'),
+      'telportable' => $this->input->post('tel'),
+      'motdepasse' => $this->input->post('mdp')
+      );
+      //Transfering data to Model
+      $this->insert_model->form_insert($data);
+      $data['message'] = 'Data Inserted Successfully';
+      //Loading View
+      $this->load->view('Visiteur/sInscrire', $data);
+      }// fin else
+    }//fin index
+  
+   
 
   public function participants()
   {

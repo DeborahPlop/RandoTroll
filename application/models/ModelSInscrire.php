@@ -6,7 +6,6 @@
             $this->load->database();
             /* chargement database.php (dans config), obligatoirement dans le constructeur */
         }
-        
         public function retournerImpayes() 
         {
             $this->db->select('*');
@@ -21,22 +20,12 @@
             // FROM participant p, sinscrire s, equipe e, responsable r 
             // Where s.noequipe = e.noequipe and e.nopar_responsable=r.noparticipant and r.noparticipant = p.noparticipant
         }
-        public function Inscription()
+        public function Inscription($donneeAinserer)
         {
-            $this->db->select ('count(noparticipant)');
-            $this->db->from('responsable');
-            $requete=$this->db->get();
-            return $requete->result_array();
-            echo ($requete);
-            $data=array(
-            'noresponsable'=>$requete +1 ,
-            'motdepasse'=>$mdp,
-            'mail'=>$mail,
-            'telportable'=>$tel,
-            );
-        $this->db->insert($this->responsable,$data);
-
+                // Inserting in Table(students) of Database(college)
+                $this->db->insert('responsable', $donneeAinserer);
         }// fin inscription
+
     }// fin classe
 
 

@@ -25,6 +25,7 @@ echo form_label('</br>Confirmation du mot de passe:</br> ','confmdp'); // creati
 echo form_password('confmdp','',array('required'=>'required'));// VERIF si confirme == mdp
 
 echo form_submit('submit', 'Valider l\'inscription');
+
 //echo form_submit('retour', 'Retour');
 echo form_close();
 ?>
