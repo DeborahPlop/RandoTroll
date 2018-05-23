@@ -1,4 +1,5 @@
-<?php
+<?php 
+
 //email.php @ application/config
 defined('BASEPATH') OR exit('No direct script access allowed');
 /*
