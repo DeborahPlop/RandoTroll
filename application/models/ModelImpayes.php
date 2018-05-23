@@ -78,6 +78,9 @@ class ModelImpayes extends CI_Model
             $requete = $this->db->get();
             return $requete->result_array();
         }
-}
 
+    
+
+    
+    }
 ?>
