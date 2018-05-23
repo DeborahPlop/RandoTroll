@@ -111,11 +111,13 @@ Class AdminInscription extends CI_Controller
         }
     }
 
-    public function MiseAJourImpayes() 
+    public function MiseAJourImpayes($noEquipe) 
     {
-       $EquipeAModifier = $this->input->post('submit');
-        var_dump($EquipeAModifier);
+        echo $noEquipe;
         
+
+
+
     }
 
 }
