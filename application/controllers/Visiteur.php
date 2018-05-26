@@ -24,73 +24,53 @@ class Visiteur extends CI_Controller {
      
      $this->load->view('templates/PiedDePage');
    }
+
    public function sInscrire()
    {
-     //$plop=1;
       $DonneesInjectees['Titre de la page']='Inscription';
      if ( $this->input->post('submit'))
      {
-    $donneesAInserer = array(
-      //'noEquipe' => $this->input->$plop,
-      'mail' => $this->input->post('mail'),
-      'motdepasse' => $this->input->post('mdp'),
-      'telportable' => $this->input->post('tel'));
 
-      $this->ModelSInscrire->Inscription($donneesAInserer); // appel du modèle
-      //$this->load->view('Visiteur/loadAccueil');
-      //$this->load->view('administrateur/insertionReussie');
-    }else{
+       $donneeParticipant=array(
+         'nom'=>$this->input->post('nom'),
+         'prenom'=>$this->input->post('prenom'),
+         'datedenaissance'=>$this->input->post('datenaiss'),// la traduire à l'envers pour la bdd
+         'sexe'=>$this->input->post('sexe'),
+       );
+       $noparticipant=$this->ModelSInscrire->Insert_Participant($donneeParticipant);
+       
+       
+        $donneeRandonneur=array(
+          'noparticipant'=>$noparticipant,
+          'mail'=>$this->input->post('mail'),
+          'telportable'=>$this->input->post('tel'),
+         );
+
+        $this->ModelSInscrire->Insert_Randonneur($donneeRandonneur);
+
+       $donneeResponsable = array(
+         'noparticipant'=>$noparticipant,
+         'motdepasse' => $this->input->post('mdp'),
+         'mail' => $this->input->post('mail'),
+         'telportable' => $this->input->post('tel')
+        );
+      $this->ModelSInscrire->Insert_Responsable($donneeResponsable);
+
+      $donneeEquipe=array(
+        'nopar_responsable'=>$noparticipant,
+        'nomequipe'=>$this->input->post('nomequipe'),
+      );
+     $this->ModelSInscrire->Insert_Equipe($donneeEquipe);
+       // appel du modèle
+
+         }else{
       $this->load->view('templates/Entete');
       $this->load->view('Visiteur/sInscrire',$DonneesInjectees);
       $this->load->view('templates/PiedDePage');
     }
    }
-  public  function index()
-  {
-    if(isset($_POST['Valider l\'inscription'])){
-    
-  }
-    //Including validation library
-    $this->load->library('form_validation');
-    $this->form_validation->set_error_delimiters('<div class="error">', '</div>');
-    //Validating Name Field
-    $this->form_validation->set_rules('nomequipe', 'Nom de l\'equipe', 'required');
-      
-    //Validating Email Field
-    $this->form_validation->set_rules('mail', 'Email d\'identification:', 'required|valid_email');
-      
-    //Validating Mobile no. Field
-    $this->form_validation->set_rules('tel', 'Téléphone du responsable', 'required|regex_match[/^[0-9]{10}$/]');
-      
-    //Validating Password Field
-    $this->form_validation->set_rules('mdp', 'Mot de Passe', 'required|min_length[8]|max_length[15]');
-      
-    if ($this->form_validation->run() == FALSE) 
-    {
-      echo ('pas run');
-      $this->load->view('Visiteur/sInscrire');
-    } else 
-    {
-      echo ('run');
-      $plop=1;
-      //Setting values for tabel columns
-      $data = array(
-      'noparticipant'=>$this-> input->$plop, // test apres faire noparticipant +=1
-      //'noparticipant' => $this->input->post('nomequipe'), le nomequipe est dans la table equipe
-      'mail' => $this->input->post('mail'),
-      'telportable' => $this->input->post('tel'),
-      'motdepasse' => $this->input->post('mdp')
-      );
-      //Transfering data to Model
-      $this->insert_model->form_insert($data);
-      $data['message'] = 'Data Inserted Successfully';
-      //Loading View
-      $this->load->view('Visiteur/sInscrire', $data);
-      }// fin else
-    }//fin index
   
-   
-
+  
   public function participants()
   {
     $this->load->view('Visiteur/participants');

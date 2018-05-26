@@ -6,25 +6,37 @@
             $this->load->database();
             /* chargement database.php (dans config), obligatoirement dans le constructeur */
         }
-        public function retournerImpayes() 
+
+        public function Insert_Participant($donneeAinserer)
         {
-            $this->db->select('*');
-            $this->db->from('equipe e');
-            $this->db->join('participant p ','p.noparticipant=e.nopar_responsable');            
-            $this->db->join('responsable r','e.nopar_responsable=r.noparticipant');
-            $this->db->join('sinscrire s','s.noequipe = e.noequipe');
-            $this->db->where('datevalidation', null);
-            $requete = $this->db->get();
-            return $requete->result_array();
-            // SELECT e.NomEquipe, p.Prenom, p.nom, r.telportable,r.mail,s.montantpaye,s.modereglement 
-            // FROM participant p, sinscrire s, equipe e, responsable r 
-            // Where s.noequipe = e.noequipe and e.nopar_responsable=r.noparticipant and r.noparticipant = p.noparticipant
+            // Insert
+            $this->db->insert('participant', $donneeAinserer);
+            return $this->db->insert_id();
         }
-        public function Inscription($donneeAinserer)
+        public function Insert_Randonneur($donneeAinserer)
         {
-                // Inserting in Table(students) of Database(college)
-                $this->db->insert('responsable', $donneeAinserer);
-        }// fin inscription
+            $this->db->insert('randonneur',$donneeAinserer);
+        }
+        public function Insert_Responsable($donneeAinserer)
+        {
+            $this->db->insert('responsable',$donneeAinserer);
+        }
+        public function Insert_Equipe($donneeAinserer)
+        {
+            $this->db->insert('equipe',$donneeAinserer);
+            
+        }
+        // public function Select_NoParticipant($donneeParticipant)
+        // {
+        //         // Select
+        //         $this->db->select('*');
+        //         $this->db->where('nom',$donneeParticipant['nom']);
+        //         $this->db->where('prenom',$donneeParticipant['prenom']);
+        //         $this->db->where('datedenaissance',$donneeParticipant['datedenaissance']);
+        //         $this->db->where('sexe',$donneeParticipant['sexe']);
+        //         $requete = $this->db->get('participant');
+        //         return $requete->row_array();
+        // }// fin inscription
 
     }// fin classe
 
