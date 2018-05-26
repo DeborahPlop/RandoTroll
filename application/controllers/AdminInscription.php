@@ -113,8 +113,9 @@ Class AdminInscription extends CI_Controller
 
     public function MiseAJourImpayes($noEquipe) 
     {
-        echo $noEquipe;
-        
+        //echo $noEquipe;
+        $Equipe = $this->$this->ModelImpayes->retournerEquipe($noEquipe);
+        var_dump($Equipe);
 
 
 

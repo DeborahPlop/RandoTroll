@@ -22,4 +22,6 @@ $config['validate']     = FALSE;
 $config['priority']     = 3;
 $config['newline']      = "\r\n";
 $config['crlf']         = "\r\n";
+            
+//ps : mdp git : r@nd0troll
 ?>
