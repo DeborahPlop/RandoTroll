@@ -56,6 +56,7 @@ class Visiteur extends CI_Controller {
         );
       $this->ModelSInscrire->Insert_Responsable($donneeResponsable);
 
+    
       $donneeEquipe=array(
         'nopar_responsable'=>$noparticipant,
         'nomequipe'=>$this->input->post('nomequipe'),
