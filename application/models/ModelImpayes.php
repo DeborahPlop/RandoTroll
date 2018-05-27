@@ -86,4 +86,5 @@ class ModelImpayes extends CI_Model
     }
 
 }
+
 ?>
