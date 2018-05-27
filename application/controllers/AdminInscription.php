@@ -27,10 +27,10 @@ Class AdminInscription extends CI_Controller
             //Mailing
             //echo('Coucou tu as réussi à faire un submit correcte');
             $Message = $this->input->post('mail');
-            $DonneesInjectees['Equipes'] = $this->ModelImpayes->retournerImpayes();
+            $DonneesInjectees['Equipes'] = $this->ModelImpayes->getImpayes();
             //echo $Message;
             
-            $DonnesUtiles = $this->ModelImpayes->AnneeEnCours();
+            $DonnesUtiles = $this->ModelImpayes->getAnneeEnCours();
             $DateFin = $DonnesUtiles[0]['DATECLOTUREINSCRIPTION'];
             $DateFin = date_create($DateFin);
             $DateFin = date_format($DateFin,"d/m/Y");
@@ -44,7 +44,7 @@ Class AdminInscription extends CI_Controller
             $j=0;            
             foreach($DonneesInjectees['Equipes'] as $uneEquipe) : 
                 //echo($uneEquipe['MAIL']);
-                $Somme =  $this->ModelImpayes->sommeDueParEquipe($uneEquipe['NOEQUIPE']) - $uneEquipe['MONTANTPAYE'];
+                $Somme =  $this->ModelImpayes->getSommeDueParEquipe($uneEquipe['NOEQUIPE']) - $uneEquipe['MONTANTPAYE'];
                 $Somme = number_format($Somme,2);
                 
                 //$DateFin = $DonnesUtiles[]
@@ -88,18 +88,18 @@ Class AdminInscription extends CI_Controller
 
         else
         {
-            //$DonneesInjectees['Equipes'] = $this->ModelSInscrire->retournerImpayes();
-            $DonneesInjectees['Equipes'] = $this->ModelImpayes->retournerImpayes();
-            //$DonneesInjectees['Equipes'] = $this->ModelImpayes->retournerImpayes("-1");
+            //$DonneesInjectees['Equipes'] = $this->ModelSInscrire->getImpayes();
+            $DonneesInjectees['Equipes'] = $this->ModelImpayes->getImpayes();
+            //$DonneesInjectees['Equipes'] = $this->ModelImpayes->getImpayes("-1");
             
             $this->load->library('table');
 
             $this->load->helper('form');
-            $this->load->library('form_validation');
+            //$this->load->library('form_validation');
             $i = 0;
             foreach($DonneesInjectees['Equipes'] as $uneEquipe):
-                $Somme =  $this->ModelImpayes->sommeDueParEquipe($uneEquipe['NOEQUIPE']);
-                //$Somme =  $this->ModelMembreDe->sommeDueParEquipe($uneEquipe['NOEQUIPE']); 
+                $Somme = $this->ModelImpayes->getSommeDueParEquipe($uneEquipe['NOEQUIPE']);
+                //$Somme =  $this->ModelMembreDe->getSommeDueParEquipe($uneEquipe['NOEQUIPE']); 
                 $DonneesInjectees['Somme'][$i]=array($uneEquipe['NOEQUIPE'],$Somme);
                 $i += 1;
             endforeach;
@@ -113,15 +113,65 @@ Class AdminInscription extends CI_Controller
 
     public function MiseAJourImpayes($noEquipe) 
     {
-        //echo $noEquipe;
-        $Equipe = $this->$this->ModelImpayes->retournerEquipe($noEquipe);
-        var_dump($Equipe);
+        if($this->input->post('submit'))
+        {
+            $Equipe = $this->ModelImpayes->getEquipe($noEquipe);
 
+            $Montant = $this->input->post('MontantPaye');
+            $ModePaiement = $this->input->post('ModePaiement');
+                
+            if($Equipe[0]['MONTANTPAYE']<=$Montant)
+            {
+                $Donnees = array
+                (
+                    "MONTANTPAYE"=>$Montant,
+                    "MODEREGLEMENT"=>$ModePaiement,
+                );
+                $this->ModelImpayes->updateEquipe($noEquipe,$Donnees);
+                $this->load->view('templates/Entete');
+                $this->load->view('AdminInscription/MiseAJourImpayesReussi'); 
+                $this->load->view('templates/PiedDePage'); 
+            }
+            else 
+            {
+                //Chargement de view d'erreur ^^ 
+                //ou alors demande de confirmation de la baisse de la somme versée
 
+                echo"<H1>ERROR</H1>";
+            }
+            
+            
+        
+        }
+        else
+        {
+            //echo $DonnéesEnvoyées;
+            //$noEquipe = $DonnéesEnvoyées;
+            $Equipe = $this->ModelImpayes->getEquipe($noEquipe);
+            $SommeDue = $this->ModelImpayes->getSommeDueParEquipe($noEquipe);
+        //var_dump($Equipe);
+        
+            $Données = array
+            (
+                "Equipe" => $Equipe,
+                "SommeDue" => $SommeDue,
+            );
+        
+            $this->load->library('table');
+            $this->load->helper('form');
+
+            $this->load->view('templates/Entete');
+            $this->load->view('AdminInscription/MiseAJourImpayes',$Données); 
+            $this->load->view('templates/PiedDePage'); 
+        }
+        
 
     }
 
 }
-
+// SELECT * 
+// FROM membrede m,responsable re, randonneur ra 
+// WHERE m.noparticipant = re.noparticipant and m.noparticipant=ra.noparticipant
+// HAVING m.ANNEE < 2018
 ?>
 </html>

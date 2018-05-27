@@ -2,7 +2,7 @@
 
 echo "Envoie de mail réussit :  <BR>";
 echo $Reussite." emails envoyés sur ".$TotalEnvois."<BR>";
-echo '<a href="http://localhost/Randotroll/index.php/AdminInscription/RelanceImpayes"> Retour </a>'
+echo '<a href="http://localhost/Randotroll/index.php/AdminInscription/RelanceImpayes" class="btn btn-default"> Retour </a>'
 
 
 

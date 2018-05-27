@@ -7,7 +7,7 @@ class ModelImpayes extends CI_Model
     /* chargement database.php (dans config), obligatoirement dans le constructeur */
     }
 
-    public function retournerImpayes() 
+    public function getImpayes() 
     {
         
         $this->db->select('*');
@@ -21,10 +21,10 @@ class ModelImpayes extends CI_Model
         
     }
 
-    public function sommeDueParEquipe($noEquipe) 
+    public function getSommeDueParEquipe($noEquipe) 
     {  
         
-        $Donnees['Annee'] = $this->AnneeEnCours();
+        $Donnees['Annee'] = $this->getAnneeEnCours();
 
         $this->db->select('*');
         $this->db->from('MembreDe m');
@@ -55,7 +55,7 @@ class ModelImpayes extends CI_Model
         return $Solde;
     }
 
-    public function AnneeEnCours()
+    public function getAnneeEnCours()
     {
         $AnneeMax = date('Y');
 
@@ -67,16 +67,22 @@ class ModelImpayes extends CI_Model
 
     }
 
-    public function retournerEquipe($noEquipe)
+    public function getEquipe($noEquipe)
     {
         $this->db->select('*');
         $this->db->from('equipe e');
         $this->db->join('participant p ','p.noparticipant=e.nopar_responsable');            
         $this->db->join('responsable r','e.nopar_responsable=r.noparticipant');
         $this->db->join('sinscrire s','s.noequipe = e.noequipe');
-        $this->db->where('noequipe', $noEquipe);
+        $this->db->where('e.noequipe', $noEquipe);
         $requete = $this->db->get();
         return $requete->result_array();
+    }
+
+    public function updateEquipe($noEquipe,$DonnesAChanger)
+    {
+        $this->db->where('noequipe', $noEquipe);
+        $this->db->update('sinscrire',$DonnesAChanger); 
     }
 
 }
