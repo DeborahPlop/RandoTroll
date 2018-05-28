@@ -1,5 +1,5 @@
 <?php 
-    class ModelSInscrire extends CI_Model 
+    class ModelSInscrire extends CI_Model
     {
         public function __construct()
         {
@@ -36,7 +36,7 @@
         //         $this->db->where('sexe',$donneeParticipant['sexe']);
         //         $requete = $this->db->get('participant');
         //         return $requete->row_array();
-        // }// fin inscription
+        // }
 
     }// fin classe
 
