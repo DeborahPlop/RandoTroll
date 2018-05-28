@@ -6,15 +6,15 @@ Class AdminInscription extends CI_Controller
 {
     public function __construct()
     {
-       parent::__construct();
-       $this->load->helper('url');
-       $this->load->helper('assets'); // helper 'assets' ajouté a Application
-       //$this->load->library("pagination");
-       //$this->load->model('ModelSInscrire');
-       //this->load->model('ModelMembreDe');
-       $this->load->library('email');
-      // $this->load->model('ModelSInscrire');
-       $this->load->model('ModelImpayes');
+        parent::__construct();
+        $this->load->helper('url');
+        $this->load->helper('assets'); // helper 'assets' ajouté a Application
+        //$this->load->library("pagination");
+        //$this->load->model('ModelSInscrire');
+        //this->load->model('ModelMembreDe');
+        $this->load->library('email');
+        $this->load->model('ModelMailingPromo');
+        $this->load->model('ModelImpayes');
        
         // chargement modèle, obligatoire
        //$this->load->model('');
@@ -168,10 +168,60 @@ Class AdminInscription extends CI_Controller
 
     }
 
+    public function MailingPromo()
+    {
+        if($this->input->post('submit'))
+        {
+            $Mails = $this->ModelMailingPromo->getAnciensParticipants();
+            $Message = $this->input->post('mail');
+            var_dump($Mails);
+            foreach($Mails as $Mail):
+
+                $this->email->from('mailing.randotroll@gmail.com');
+                $this->email->to($Mail['mail']); 
+                $this->email->subject('Venez nombreux vous inscrire à notre nouvelle session');
+                $this->email->message($Message);
+
+                if (!$this->email->send())
+                {
+                    $this->email->print_debugger();
+                    echo "Error";
+                }
+            endforeach;//Envoie du mail aux contactes
+            
+        }
+        else 
+        {
+        
+        $this->load->helper('form');
+        $this->load->view('templates/Entete');
+        $this->load->view('AdminInscription/MailingPromo');
+        $this->load->view('templates/PiedDePage');
+
+        }
+        
+    }
+
 }
-// SELECT * 
-// FROM membrede m,responsable re, randonneur ra 
-// WHERE m.noparticipant = re.noparticipant and m.noparticipant=ra.noparticipant
-// HAVING m.ANNEE < 2018
+
+/*
+SELECT distinct(mail), r.noparticipant
+FROM membrede m, randonneur r
+WHERE m.noparticipant=r.noparticipant AND noEquipe NOT In(
+    
+    SELECT noEquipe From Membrede Where Annee = 2018)
+
+Union (
+    
+    	SELECT distinct(mail), r.noparticipant 
+		FROM membrede m, responsable r
+		WHERE m.noparticipant=r.noparticipant AND noEquipe NOT In(
+    
+    		SELECT noEquipe From Membrede Where Annee = 2018)
+    
+    	)
+
+*/
+
 ?>
 </html>
