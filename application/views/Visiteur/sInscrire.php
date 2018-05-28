@@ -51,10 +51,7 @@ echo('</td></tr>');
 //</select></td>
 //</tr>
 //
-
 echo '<tr></tr>' ;
-
-
 
 echo ('</br>');
 echo('<tr><td>');

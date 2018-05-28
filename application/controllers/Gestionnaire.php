@@ -29,9 +29,11 @@ public function gestion_compte()
   }
   public function gestion_course()
   {
+    $this->load->library('table');
     $this->load->helper('form');
     $this->load->library('form_validation');
     $this->load->view('Gestionnaire/gestion_course');
+    $this->load->view('Gestionnaire/participants');
   }
   public function change_password()
   {
