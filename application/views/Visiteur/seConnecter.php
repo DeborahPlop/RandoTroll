@@ -1,6 +1,5 @@
 <html>
 
-<<<<<<< HEAD
 <body>
 <div class="row"> 
     <div class="col-sm-2">
@@ -34,17 +33,5 @@
             </div>
         </div>
     </div>
-=======
-echo form_submit('submit', 'Se connecter');
-
-echo '<a href="recupmdp">Mot de passe oublié ?</a>';
-
-
-echo form_close();
-
-echo '<a href="sInscrire">S\'inscrire ? </a>';
-
-?>
->>>>>>> 7c45f900806ec9b4b00a6de6c734675a7697beb2
 </body>
 <html>
