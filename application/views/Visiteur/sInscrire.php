@@ -16,7 +16,7 @@ echo form_label('Nom: ','nom');
 
 echo('</td><td>');
 
-echo form_input('nom','',array('required'=>'required')); 
+echo form_input('nom',$nom,array('required'=>'required')); 
 
 echo('</td></tr>');
 
@@ -25,14 +25,14 @@ echo form_label('Prénom: ','prenom');
 
 echo('</td><td>');
 
-echo form_input('prenom','',array('required'=>'required')); 
+echo form_input('prenom',$prenom,array('required'=>'required')); 
 
 echo('</td></tr>');
 echo('<tr><td>');
 
 echo form_label('Date de Naisance: ','datenaiss');
 echo('</td><td>');
-echo form_input('datenaiss','',array('required'=>'required')); 
+echo form_input('datenaiss',$datenaiss,array('required'=>'required')); 
 echo('</td></tr>');
 
 echo('<tr><td>');
@@ -57,25 +57,25 @@ echo ('</br>');
 echo('<tr><td>');
 echo form_label('Nom de l\'équipe: ','nomequipe'); // creation d'un label devant la zone de saisie
 echo('</td><td>');
-echo form_input('nomequipe','',array('required'=>'required')); // VERIF a faire sur la nouveauté du nom de l'équipe
+echo form_input('nomequipe',$nomequipe,array('required'=>'required')); // VERIF a faire sur la nouveauté du nom de l'équipe
 echo('</td></tr>');
 
 echo('<tr><td>');
 echo form_label('Email d\'identification: ','mail'); // creation d'un label devant la zone de saisie
 echo('</td><td>');
-echo form_input('mail','',array('required'=>'required'));
+echo form_input('mail',$mail,array('required'=>'required'));
 echo('</td></tr>');
 
 echo('<tr><td>');
 echo form_label('Téléphone du responsable: ','tel'); // creation d'un label devant la zone de saisie
 echo('</td><td>');
-echo form_input('tel','',array('required'=>'required'));
+echo form_input('tel',$tel,array('required'=>'required'));
 echo('</td></tr>');
 
 echo('<tr><td>');
 echo form_label('Mot de Passe: ','mdp'); // creation d'un label devant la zone de saisie
 echo('</td><td>');
-echo form_password('mdp','',array('required'=>'required'));
+echo form_password('mdp','',array('required'=>'required')).$message;
 echo('</td></tr>');
 
 echo('<tr><td>');
@@ -86,7 +86,7 @@ echo('</td></tr>');
 echo('</table>');
 echo ('</br></br>');
 
-echo form_submit('submit', 'Valider l\'inscription');
+echo form_submit('valider', 'Valider l\'inscription');
 
 //echo form_submit('retour', 'Retour');
 echo form_close();

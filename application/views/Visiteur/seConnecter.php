@@ -16,9 +16,12 @@ echo form_password('mdp','',array('required'=>'required'));
 echo form_submit('submit', 'Se connecter');
 
 echo '<a href="recupmdp">Mot de passe oublié ?</a>';
+
+
 echo form_close();
 
 echo '<a href="sInscrire">S\'inscrire ? </a>';
+
 ?>
 </body>
 <html>
