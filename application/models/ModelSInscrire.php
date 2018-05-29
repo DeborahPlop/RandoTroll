@@ -26,6 +26,25 @@
             $this->db->insert('equipe',$donneeAinserer);
             
         }
+
+        public function Test_Inscrit($donneeATester)
+        {
+          
+           $this->db->select('count(*)');
+           $this->db->from('responsable');
+           $this->db->where('mail',$donneeATester);
+           $requete = $this->db->get();
+           return $requete->row_array();
+           // Select
+        }
+        public function Test_Equipe($donneeATester)
+        {          
+            $this->db->select('count(*)');
+            $this->db->from('equipe');
+            $this->db->where('nomequipe',$donneeATester);
+            $requete = $this->db->get();
+            return $requete->row_array();
+        }
         // public function Select_NoParticipant($donneeParticipant)
         // {
         //         // Select

@@ -1,4 +1,5 @@
 <html>
+<<<<<<< HEAD
 
     <body>
         <H1 align = "center" style="color:#EAF815">Bienvenue sur RandoTroll !</H1>
@@ -37,4 +38,16 @@
             </div>
         </div>
     </body>
+=======
+<?php echo ("Bienvenue sur RandoTroll !") ?>
+<body>
+<?php
+echo 'j-X suivant la date de la course';
+echo 'plus que X place = 700 - les deja inscrits';
+echo form_open('Visiteur/seDeconnecter');
+echo form_submit('deco', 'Se Deconnecter');
+echo form_close();
+?>
+</body>
+>>>>>>> 7c45f900806ec9b4b00a6de6c734675a7697beb2
 <html>
