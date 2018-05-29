@@ -16,7 +16,7 @@ class Visiteur extends CI_Controller {
    {
      $this->load->view('templates/Entete');
      //Modif ici!
-     $this->load->view('Visiteur/menu'); // Pense peut être à le rajouter dans ma bare de menu ? 
+     //$this->load->view('Visiteur/menu'); // Pense peut être à le rajouter dans ma bare de menu ? 
     //modif ici ! 
      $this->load->view('Visiteur/loadAccueil');
      
