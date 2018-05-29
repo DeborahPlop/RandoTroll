@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 <body>
+<div style="background-color:black">
 <?php 
 echo '
 <nav class="navbar navbar-inverse">

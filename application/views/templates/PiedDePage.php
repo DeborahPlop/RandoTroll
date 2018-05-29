@@ -1,12 +1,8 @@
 <!--<p><em>&copy; Nous Contacter</em></p>-->
+</div>
 </body>
 
-<footer>
-<?php echo "dans pied de page";
-//echo '<h2>'.$Facebook['cTitre'].'</h2>';
-//echo $Facebook['cTexte'];
-//echo '<p>'.img($Facebook['logo facebook']).'<p>'; ?>
-    <!-- Placez ici le contenu du pied de page -->
-
+<footer style="background-color:yellow">
+<BR><BR><BR><BR>
 </footer>
 </html>
