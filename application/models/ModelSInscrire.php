@@ -73,7 +73,7 @@
         {
             $this->db->select('*');
             $this->db->from('membrede');
-            $this->db->where($DonneeEquipe);
+            $this->db->where($donneeATester);
             $requete = $this->db->get();
             return $requete->result_array();
         }

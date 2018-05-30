@@ -38,13 +38,15 @@ Where Annee = 2018 AND `DATEVALIDATION` is not null
       $Infos =array(
         'NOEQUIPE'=>$unNoequipe['NoEquipe'],
         'ANNEE'=>$AnneeEnCours[0]['ANNEE'],
-      
       );
+
+
       $nombreMembre=$this->modelSInscrire->getNbMembres($Infos);
       //var_dump($nombreMembre['count(*)']);
       $somme = $somme + $nombreMembre['count(*)'] ;
       //$DateCourse = date_create();($AnneeEnCours[0]['DATECOURSE'],"d/m/Y");
-
+      $X = $this->modelSInscrire->getMembresD_UneEquipe($Infos);
+      var_dump($X);
     endforeach;
 
     $Données = array(
@@ -53,6 +55,9 @@ Where Annee = 2018 AND `DATEVALIDATION` is not null
       'MaxParticipants'=>$AnneeEnCours[0]['MAXPARTICIPANTS'],
       'nbInscrits'=>$somme,
     );
+
+
+    
 
     //var_dump($Données);
     $this->load->view('templates/Entete');
