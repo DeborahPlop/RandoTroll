@@ -16,37 +16,23 @@ class Visiteur extends CI_Controller {
   public function loadAccueil()
   {
     $AnneeEnCours = $this->ModelImpayes->getAnneeEnCours();
-    //var_dump($AnneeEnCours);
 
-    /*
-    
-Select NoEquipe 
-From Sinscrire
-Where Annee = 2018 AND noequipe Not In(
-SELECT `NOEQUIPE` FROM Sinscrire WHERE `DATEVALIDATION` is null)
-
-Select NoEquipe 
-From Sinscrire
-Where Annee = 2018 AND `DATEVALIDATION` is not null
-    */
-    
     $noEquipes = $this->modelSInscrire->getNoEquipesInscrites($AnneeEnCours[0]['ANNEE']);
     //var_dump($noEquipes);
     $somme = 0;
     foreach($noEquipes as $unNoequipe):
       
-      $Infos =array(
-        'NOEQUIPE'=>$unNoequipe['NoEquipe'],
-        'ANNEE'=>$AnneeEnCours[0]['ANNEE'],
-      );
+        $Infos =array(
+          'NOEQUIPE'=>$unNoequipe['NoEquipe'],
+          'ANNEE'=>$AnneeEnCours[0]['ANNEE'],
+        );
 
 
       $nombreMembre=$this->modelSInscrire->getNbMembres($Infos);
       //var_dump($nombreMembre['count(*)']);
       $somme = $somme + $nombreMembre['count(*)'] ;
       //$DateCourse = date_create();($AnneeEnCours[0]['DATECOURSE'],"d/m/Y");
-      $X = $this->modelSInscrire->getMembresD_UneEquipe($Infos);
-      var_dump($X);
+      
     endforeach;
 
     $Données = array(
@@ -195,33 +181,35 @@ Where Annee = 2018 AND `DATEVALIDATION` is not null
   
   public function seConnecter()
   {
-      $this->session->statut=0;// 0 Visiteur
-      $DonneesInjectees['Titre de la page']='Connexion';
-      if ( $this->input->post('submit'))
-      {
-        $donneeResponsable=array(
-          'mail'=>$this->input->post('mail'),
-          'motdepasse'=>$this->input->post('mdp'),
-          );
-          $this->load->model('ModelseConnecter');
-          $test = $this->ModelseConnecter->Test_Inscrit($donneeResponsable);
-          if($test['count(*)']==0){
-            echo 'Vous n\'êtes pas encore inscrit';
-          }else if ($test['count(*)']==1){
-            echo'OK';
-            $this->session->statut=1;//1 = Responsable equipe
+    $this->session->statut=0;// 0 Visiteur
+    $DonneesInjectees['Titre de la page']='Connexion';
+    if ( $this->input->post('submit'))
+    {
+      $donneeResponsable=array(
+        'mail'=>$this->input->post('mail'),
+        'motdepasse'=>$this->input->post('mdp'),
+      );
+      $this->load->model('ModelseConnecter');
+      $test = $this->ModelseConnecter->Test_Inscrit($donneeResponsable);
+      if($test['count(*)']==0){
+         echo 'Vous n\'êtes pas encore inscrit';
+      }else if ($test['count(*)']==1){
+        echo'OK';
+        $this->session->statut=1;//1 = Responsable equipe
             //  if ($this->session->statut==0) // 0 : statut visiteur
         //  {
         //    redirect('/visiteur/loadAccueil'); // pas les droits : redirection vers connexion
         //  }
-            $this->load->view('templates/Entete');
-            $this->load->view('Gestionnaire/participants');
-            $this->load->view('Gestionnaire/gestion_course');
-            $this->load->view('templates/PiedDePage');
-          }else{
-            echo 'Erreur';
-          }   
+        $this->load->view('templates/Entete');
+        $this->load->view('Gestionnaire/participants');
+        $this->load->view('Gestionnaire/gestion_course');
+        $this->load->view('templates/PiedDePage');
       }else{
+        echo 'Erreur';
+      }   
+    }
+    else
+    {
       $this->load->view('templates/Entete');
       $this->load->view('Visiteur/seConnecter',$DonneesInjectees);
       $this->load->view('templates/PiedDePage');
@@ -278,9 +266,6 @@ Where Annee = 2018 AND `DATEVALIDATION` is not null
       $this->load->view('templates/PiedDePage');
     }
   }// deconnexion
-
-  
-
 
 }  // Visiteur
 

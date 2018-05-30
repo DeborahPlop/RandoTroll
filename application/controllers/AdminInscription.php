@@ -11,7 +11,7 @@ Class AdminInscription extends CI_Controller
         $this->load->helper('assets'); // helper 'assets' ajouté a Application
         //$this->load->library("pagination");
         //$this->load->model('ModelSInscrire');
-        //this->load->model('ModelMembreDe');
+        $this->load->model('ModelVague');
         $this->load->library('email');
         $this->load->model('ModelMailingPromo');
         $this->load->model('ModelImpayes');
@@ -191,7 +191,7 @@ Class AdminInscription extends CI_Controller
                 if (!$this->email->send())
                 {
                     $this->email->print_debugger();
-                    echo "Error";
+                    //echo "Error";
                 }
             endforeach;//Envoie du mail aux contactes
             
@@ -211,26 +211,65 @@ Class AdminInscription extends CI_Controller
         
     }
 
+    public function AffectationVague()
+    {
+        if($this->input->post('submit'))
+        {
+            $Données =array(
+                'noEquipe' => $this->input->post('Equipes'),
+                'Vague' => $this->input->post('Vague'),
+            );
+            $this->ModelVague->updateChoisir($Données);
+        }
+        
+            $Equipes = $this->ModelVague->getEquipes_A_Affecter();
+            //var_dump($Equipes);
+
+            $DonnéesDeLaPage = array(
+                'Equipes'=>$Equipes,
+            );
+            
+            $this->load->helper('form');
+            $this->load->view('templates/Entete');
+            $this->load->view('AdminInscription/AffectationVague',$DonnéesDeLaPage);
+            $this->load->view('templates/PiedDePage');
+        
+    }
+
+    public function Remboursement()
+    {
+        if($this->input->post('Remboursement'))
+        {
+            $Données= array(
+                'noEquipe' => $this->input->post('Equipes'),
+                'MONTANTREMBOURSE'=> $this->input->post('Montant'),
+            );
+            $this->ModelImpayes->updateRemboursement($Données);
+        }
+        
+        $Equipes = $this->ModelImpayes->getEquipesRemboursement();
+            //var_dump($Equipes);
+            $données = array('Equipes'=>$Equipes);
+            $i=0;
+            foreach($Equipes as $uneEquipe):
+                //var_dump($uneEquipe);
+                $Somme = $this->ModelImpayes->getSommeDueParEquipe($uneEquipe['NOEQUIPE']);
+                //$Somme =  $this->ModelMembreDe->getSommeDueParEquipe($uneEquipe['NOEQUIPE']); 
+                $temp = array('SommeAPayer'=>$Somme);
+                $données['Equipes'][$i]=$uneEquipe + $temp;
+                $i +=1;
+            endforeach;
+            //var_dump($EquipesFinales);
+            //$données = array('Equipes'=>$Equipes);
+            //var_dump($données);
+            $this->load->helper('form');
+            $this->load->library('table');
+            $this->load->view('templates/Entete');
+            $this->load->view('AdminInscription/Remboursement',$données);
+            $this->load->view('templates/PiedDePage');
+    }
 }
 
-/*
-SELECT distinct(mail), r.noparticipant
-FROM membrede m, randonneur r
-WHERE m.noparticipant=r.noparticipant AND noEquipe NOT In(
-    
-    SELECT noEquipe From Membrede Where Annee = 2018)
-
-Union (
-    
-    	SELECT distinct(mail), r.noparticipant 
-		FROM membrede m, responsable r
-		WHERE m.noparticipant=r.noparticipant AND noEquipe NOT In(
-    
-    		SELECT noEquipe From Membrede Where Annee = 2018)
-    
-    	)
-
-*/
 
 ?>
 </html>
