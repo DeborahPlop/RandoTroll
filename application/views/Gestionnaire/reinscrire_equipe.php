@@ -11,7 +11,7 @@ echo form_open('gestionnaire/reinscrire_equipe');
 echo form_label('Email:</br> ','mail'); // creation d'un label devant la zone de saisie
 echo form_input('mail','',array('required'=>'required')); // verif que l'email soit bon7
 
-echo form_submit('submit', 'Connexion');
+echo form_submit('connexion', 'Connexion');
 
 echo ('Afficher l equipe en question');
 ?>

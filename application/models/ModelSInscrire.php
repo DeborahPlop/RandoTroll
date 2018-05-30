@@ -69,14 +69,7 @@
             return $requete->row_array();
         }
 
-        public function getMembresD_UneEquipe($donneeATester)
-        {
-            $this->db->select('*');
-            $this->db->from('membrede');
-            $this->db->where($DonneeEquipe);
-            $requete = $this->db->get();
-            return $requete->result_array();
-        }
+
         
         // public function Select_NoParticipant($donneeParticipant)
         // {

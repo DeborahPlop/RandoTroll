@@ -16,7 +16,7 @@ echo form_label('Nom: ','nom');
 
 echo('</td><td>');
 
-echo form_input('nom',$nom,array('required'=>'required')); 
+echo form_input('nom',$nom,array('required'=>'required','pattern'=>'[a-zA-Z]{1,40}')); 
 
 echo('</td></tr>');
 
@@ -25,14 +25,14 @@ echo form_label('Prénom: ','prenom');
 
 echo('</td><td>');
 
-echo form_input('prenom',$prenom,array('required'=>'required')); 
+echo form_input('prenom',$prenom,array('required'=>'required','pattern'=>'[a-zA-Z]{1,20}')); 
 
 echo('</td></tr>');
 echo('<tr><td>');
 
 echo form_label('Date de Naisance: ','datenaiss');
 echo('</td><td>');
-echo form_input('datenaiss',$datenaiss,array('required'=>'required')); 
+echo form_input('datenaiss',$datenaiss,array('required'=>'required','pattern'=>'(19|20)\d\d[\/](0[1-9]|1[012])[\/](0[1-9]|[12][0-9]|3[01])')); 
 echo('</td></tr>');
 
 echo('<tr><td>');
@@ -63,13 +63,13 @@ echo('</td></tr>');
 echo('<tr><td>');
 echo form_label('Email d\'identification: ','mail'); // creation d'un label devant la zone de saisie
 echo('</td><td>');
-echo form_input('mail',$mail,array('required'=>'required'));
+echo form_input('mail',$mail,array('required'=>'required','pattern'=>'[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([_\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})'));
 echo('</td></tr>');
 
 echo('<tr><td>');
 echo form_label('Téléphone du responsable: ','tel'); // creation d'un label devant la zone de saisie
 echo('</td><td>');
-echo form_input('tel',$tel,array('required'=>'required'));
+echo form_input('tel',$tel,array('required'=>'required','pattern'=>'[0-9]{10}'));
 echo('</td></tr>');
 
 echo('<tr><td>');

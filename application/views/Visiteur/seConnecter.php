@@ -14,7 +14,7 @@
                         /* set_value : en cas de non validation les données déjà
                         saisies sont réinjectées dans le formulaire */
                         $blanc=array('style'=>'color:#CBCBCB');
-                        echo form_open('visiteur/seConnecter');
+                        echo form_open('Visiteur/seConnecter');
                         echo form_label('Mail : ','mail',$blanc); // creation d'un label devant la zone de saisie
                         echo form_input('mail','',array('required'=>'required'));
                         echo' ';

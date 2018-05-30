@@ -52,14 +52,30 @@
             $requete = $this->db->get();
             return $requete->row_array();
         }
-        public function Recup_noequipe($mail)
+
+
+        public function getMembresD_UneEquipe($donneeATester)
         {
-            $this->db->select('noequipe');
-            $this->db->from('equipe e');
-            $this->db->join('responsable r ','r.noparticipant=e.nopar_responsable');
-            $this->db->where('mail',$mail);
+
+            $this->db->select('*');
+            $this->db->from('membrede');
+            $this->db->where($donneeATester);
             $requete = $this->db->get();
-            return $requete->row_array();
+            return $requete->result_array();
+     
+        }
+        public function Recup_NoParticipant($donneeConnexion)
+        {
+            $donneeConnexion=array(
+                'mail'=>$donneeConnexion['mail'],
+                'mdp'=>$donneeConnexion['mdp'],
+            );
+
+            $this->db->select('noparticipant');
+            $this->db->from('responsable');
+            $this->db->where('mail',$donneeConnexion['mail'],'motdepasse',$donneeConnexion['mdp']);
+            $requete = $this->db->get();
+            return $requete->result_array();
         }
    }// fin classe
 

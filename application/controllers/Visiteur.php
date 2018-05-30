@@ -190,50 +190,80 @@ Where Annee = 2018 AND `DATEVALIDATION` is not null
   
   public function seConnecter()
   {
-    $donneeCoAdmin=$this->input->post('mail');
-     
-    $this->load->model('ModelseConnecter');
-    $testA = $this->ModelseConnecter->Test_Admin($donneeCoAdmin);
-  
-    $donneeConnexion=array(
-      'mail'=>$this->input->post('mail'),
-      'motdepasse'=>$this->input->post('mdp'),
-    );
-
+    $this->session->statut=0;
+    $DonneesInjectees['Titre de la page']='Connexion';
+    if ($this->input->post('submit'))
+    {
+      $donneeCoAdmin=$this->input->post('mail');
+      
       $this->load->model('ModelseConnecter');
-      $test = $this->ModelseConnecter->Test_Inscrit($donneeConnexion);
-   
-      if($test['count(*)']==0 && $testA['count(*)']==0){
-        echo 'Vous n\'êtes pas encore inscrit';
-        if ($this->session->statut==0) // 0 : statut visiteur
-        {
-          redirect('/visiteur/loadAccueil'); // pas les droits : redirection vers connexion
+      $testA = $this->ModelseConnecter->Test_Admin($donneeCoAdmin);
+    
+      $donneeConnexion=array(
+        'mail'=>$this->input->post('mail'),
+        'motdepasse'=>$this->input->post('mdp'),
+      );
+
+        $this->load->model('ModelseConnecter');
+        $test = $this->ModelseConnecter->Test_Inscrit($donneeConnexion);
+    
+        if($test['count(*)']==0 && $testA['count(*)']==0){
+          echo 'Vous n\'êtes pas encore inscrit';
+          // if ($this->session->statut==0) // 0 : statut visiteur
+          // {
+          //   redirect('/visiteur/loadAccueil'); // pas les droits : redirection vers connexion
+          // }
+        }else if ($test['count(*)']==1){
+          echo'OK';
+          $this->session->statut=1;//1 = Responsable equipe
+          
+          // $mail=$this->input->post('mail');
+          // $this->load->model('ModelseConnecter');
+          // $noequipe=$this->ModelseConnecter->Recup_noequipe($mail);
+          // $donneeATester=array(
+          //  'noequipe'=> $noequipe['noequipe'],
+          //  'annee'=> $Annee = date('Y'),
+          // );
+          //$membre=$this->ModelseConnecter->getMembresD_UneEquipe($donneeATester);
+          // $array=array(
+          //   'annee' => date('Y'),
+          //   'noequipe'=>$noequipe,
+          // );
+
+          $annee=date('Y');
+          $this->session->Annee=$annee;
+          $donneeConnexion=array(
+            'mail'=>$this->input->post('mail'),
+            'mdp'=>$this->input->post('mdp'),
+          );
+          $this->load->model('ModelseConnecter');
+          $noparticipant=$this->ModelseConnecter->Recup_NoParticipant($donneeConnexion);
+          $this->session->NoParticipant=$noparticipant[0]['noparticipant'];
+          $this->load->library('table');
+          $this->load->view('templates/Entete');
+          $this->load->view('Gestionnaire/participants'); //donnéesinjectées=noequipe
+          $this->load->view('Gestionnaire/gestion_course');
+          $this->load->view('templates/PiedDePage');
+        }else if ($testA['count(*)']==1){
+          $mail=$this->input->post('mail');
+
+          $this->load->model('ModelseConnecter');
+          $testA = $this->ModelseConnecter->Recup_profilAdmin($mail);
+          $this->session->statut=$resultat;// resultat = profil de l'admin
+
+        }else{
+          $this->load->view('templates/Entete');
+          $this->load->view('Visiteur/seConnecter',$DonneesInjectees);
+          $this->load->view('templates/PiedDePage');
         }
-      }else if ($test['count(*)']==1){
-        echo'OK';
-        $this->session->statut=1;//1 = Responsable equipe
-        $mail=$this->input->post('mail');
-        $this->load->model('ModelseConnecter');
-        $DonneesInjectees = $this->ModelseConnecter->Recup_noequipe($mail);
-        $this->load->library('table');
-        $this->load->view('templates/Entete');
-        $this->load->view('Gestionnaire/participants',$DonneesInjectees); //donnéesinjectées=noequipe
-        $this->load->view('Gestionnaire/gestion_course');
-        $this->load->view('templates/PiedDePage');
-      }else if ($testA['count(*)']==1){
-        $mail=$this->input->post('mail');
-
-        $this->load->model('ModelseConnecter');
-        $testA = $this->ModelseConnecter->Recup_profilAdmin($mail);
-        $this->session->statut=$resultat;// resultat = profil de l'admin
-
-      }else{
+    }else
+    {
       $this->load->view('templates/Entete');
       $this->load->view('Visiteur/seConnecter',$DonneesInjectees);
       $this->load->view('templates/PiedDePage');
     }
   }// seConnecter
- 
+
   public function recupmdp()
   {
     $mail =  $this->input->post('mail');
@@ -261,31 +291,13 @@ Where Annee = 2018 AND `DATEVALIDATION` is not null
     }
   } // recup mdp
 
-  public function seDeconnecter() 
-  { // destruction de la session = déconnexion
-    if ( $this->input->post('deco'))
-    {
-      //$this->session->sess_destroy();
-      $this->load->view('templates/Entete');
-      $this->load->view('Visiteur/seConnecter');
-      $this->load->view('templates/PiedDePage');
-    }
-  }
-  else{
-    $this->load->view('templates/Entete');
-    $this->load->view('Visiteur/recupmdp');
-    $this->load->view('templates/PiedDePage');
-  }
-} // recup mdp
 
 public function seDeconnecter() 
 { // destruction de la session = déconnexion
   if ( $this->input->post('deco'))
   {
     $this->session->sess_destroy();
-    $this->load->view('templates/Entete');
-    $this->load->view('Visiteur/seConnecter');
-    $this->load->view('templates/PiedDePage');
+    redirect('Visiteur/loadAccueil');
   }
 }// deconnexion
 
