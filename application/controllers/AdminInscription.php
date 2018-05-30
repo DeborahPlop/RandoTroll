@@ -91,13 +91,14 @@ Class AdminInscription extends CI_Controller
             //$DonneesInjectees['Equipes'] = $this->ModelSInscrire->getImpayes();
             $DonneesInjectees['Equipes'] = $this->ModelImpayes->getImpayes();
             //$DonneesInjectees['Equipes'] = $this->ModelImpayes->getImpayes("-1");
-            
+            //var_dump($DonneesInjectees);
             $this->load->library('table');
 
             $this->load->helper('form');
             //$this->load->library('form_validation');
             $i = 0;
             foreach($DonneesInjectees['Equipes'] as $uneEquipe):
+                //var_dump($uneEquipe);
                 $Somme = $this->ModelImpayes->getSommeDueParEquipe($uneEquipe['NOEQUIPE']);
                 //$Somme =  $this->ModelMembreDe->getSommeDueParEquipe($uneEquipe['NOEQUIPE']); 
                 $DonneesInjectees['Somme'][$i]=array($uneEquipe['NOEQUIPE'],$Somme);
@@ -105,8 +106,13 @@ Class AdminInscription extends CI_Controller
             endforeach;
             //var_dump($DonneesInjectees['Somme']);
             //var_dump($DonneesInjectees); //la somme de toutes les données précédentes. 
+            $Utilies = array(
+                'lien' => 'RelanceImpayes',
+                'titre'=> '<H1 align = "center" style="color:#EAF815">Mailing pour les impayes</H1>',
+            );
             $this->load->view('templates/Entete');
             $this->load->view('AdminInscription/RelanceImpayes',$DonneesInjectees); 
+            $this->load->view('AdminInscription/Mailing',$Utilies);
             $this->load->view('templates/PiedDePage');
         }
     }
@@ -174,7 +180,7 @@ Class AdminInscription extends CI_Controller
         {
             $Mails = $this->ModelMailingPromo->getAnciensParticipants();
             $Message = $this->input->post('mail');
-            var_dump($Mails);
+            //var_dump($Mails);
             foreach($Mails as $Mail):
 
                 $this->email->from('mailing.randotroll@gmail.com');
@@ -192,10 +198,13 @@ Class AdminInscription extends CI_Controller
         }
         else 
         {
-        
+            $Utilies = array(
+                'lien' => 'MailingPromo',
+                'titre'=> '<H1 align = "center" style="color:#EAF815"> Envoie de mails promotionnels</H1>',
+            );
         $this->load->helper('form');
         $this->load->view('templates/Entete');
-        $this->load->view('AdminInscription/MailingPromo');
+        $this->load->view('AdminInscription/Mailing',$Utilies);
         $this->load->view('templates/PiedDePage');
 
         }

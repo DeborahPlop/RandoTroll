@@ -26,11 +26,13 @@ class ModelImpayes extends CI_Model
     {  
         
         $Donnees['Annee'] = $this->getAnneeEnCours();
-
+        //echo$Donnees['Annee'][0]['ANNEE'];
+        //var_dump($Donnees);
         $this->db->select('*');
         $this->db->from('MembreDe m');
         $this->db->join('participant p ','p.noparticipant=m.noparticipant');
         $this->db->where('m.noequipe', $noEquipe);
+        $this->db->where('ANNEE',$Donnees['Annee'][0]['ANNEE']);
         $requete = $this->db->get();
         $Donnees['Membres'] = $requete->result_array();
         //var_dump($Donnees);

@@ -13,14 +13,17 @@
             $this->db->insert('participant', $donneeAinserer);
             return $this->db->insert_id();
         }
+        
         public function Insert_Randonneur($donneeAinserer)
         {
             $this->db->insert('randonneur',$donneeAinserer);
         }
+        
         public function Insert_Responsable($donneeAinserer)
         {
             $this->db->insert('responsable',$donneeAinserer);
         }
+        
         public function Insert_Equipe($donneeAinserer)
         {
             $this->db->insert('equipe',$donneeAinserer);
@@ -37,6 +40,7 @@
            return $requete->row_array();
            // Select
         }
+        
         public function Test_Equipe($donneeATester)
         {          
             $this->db->select('count(*)');
@@ -45,6 +49,35 @@
             $requete = $this->db->get();
             return $requete->row_array();
         }
+        
+        public function getNoEquipesInscrites($Annee)
+        {
+            $this->db->select('NoEquipe');
+            $this->db->from('Sinscrire');
+            $this->db->where('Annee',$Annee);
+            $this->db->where('DATEVALIDATION is not null',NULL,FALSE);
+            $requete = $this->db->get();
+            return $requete->result_array();
+        }
+
+        public function getNbMembres($DonneeEquipe)
+        {
+            $this->db->select('count(*)');
+            $this->db->from('membrede');
+            $this->db->where($DonneeEquipe);
+            $requete = $this->db->get();
+            return $requete->row_array();
+        }
+
+        public function getMembresD_UneEquipe($donneeATester)
+        {
+            $this->db->select('*');
+            $this->db->from('membrede');
+            $this->db->where($DonneeEquipe);
+            $requete = $this->db->get();
+            return $requete->result_array();
+        }
+        
         // public function Select_NoParticipant($donneeParticipant)
         // {
         //         // Select

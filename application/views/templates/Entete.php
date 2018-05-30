@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 <body>
+<div style="background-color:black">
 <?php 
 echo '
 <nav class="navbar navbar-inverse">
@@ -17,6 +18,7 @@ echo '
             <li><a href="http://localhost/Randotroll/index.php/AdminInscription/MailingPromo">Mailing promotionnel</a></li>
             <li><a href="http://localhost/Randotroll/index.php/Visiteur/seConnecter">Connexion</a></li>
             <li><a href="http://localhost/Randotroll/index.php/Visiteur/sInscrire">Inscription</a></li>
+            <li><a href="http://localhost/Randotroll/index.php/Visiteur/seDeconnecter">Deconnexion</a></li>
             </ul>
     </div>
 </nav>'

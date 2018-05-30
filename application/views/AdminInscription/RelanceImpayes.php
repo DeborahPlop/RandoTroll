@@ -1,20 +1,13 @@
-   
+<div class="row">  
+
+<div class="col-sm-12">
+<section >
+<div class = "section-inner" style="background-color:#00021A;padding:20px">
+
 <?php 
-    echo '<H1> Gestions des Impayés </H1>';
+    echo '<H1 align = "center" style="color:#EAF815"> Gestions des Impayés </H1>';
 
-    echo '<div class="container-fluid"><section class="section-inner">';
-    echo form_open('AdminInscription/RelanceImpayes');
-    //$this->load->library('table');
-    
-    //echo form_open('AdminInscription/RelanceImpayes');
-    
-    echo form_textarea('mail', '',array('required'=>'required','class'=>"form-control"))."<BR>";
-
-    echo form_submit('submit', 'Envoyer')."<BR>";
-    
-    echo form_close();
-    echo '</section></div>';
-    echo '<div class="container-fluid"><section class="section-inner">';
+    echo'<div class="table-responsive">';
     //echo '<div class="table-responsive">';
     echo form_open('AdminInscription/MiseAJourImpayes');
     $this->table->set_heading('Num','Nom Equipe', 'Nom Responsable', 'Portable', 'Mail', 'Montant du', 'Restant à Payer','Mode règlement','');  
@@ -34,17 +27,20 @@
         
         //echo form_close();  
         endforeach  ;
-    $Style = array('table_open' => '<table class="table table-hover" >');
+    $Style = array('table_open' => '<table class="table" style="color:#CBCBCB">');
     $this->table->set_template($Style);
     
     echo $this->table->generate();
    
     echo form_close();
-    echo '</section></div>';
-    //echo '</div>';
-    
-    
-    
-    
+    echo'</div>';
+
+    //Couleur de text
+    //#CBCBCB
 ?>
 
+</div>
+<section>
+</div>
+</div>
+<BR>
