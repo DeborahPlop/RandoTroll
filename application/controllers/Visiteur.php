@@ -157,25 +157,43 @@ class Visiteur extends CI_Controller {
   $DonneesInjectees['Titre de la page']='Connexion';
   if ( $this->input->post('submit'))
   {
-     $donneeResponsable=array(
-       'mail'=>$this->input->post('mail'),
-       'motdepasse'=>$this->input->post('mdp'),
-      );
+    $donneeCoAdmin=$this->input->post('mail');
+     
+    $this->load->model('ModelseConnecter');
+    $testA = $this->ModelseConnecter->Test_Admin($donneeCoAdmin);
+  
+    $donneeConnexion=array(
+      'mail'=>$this->input->post('mail'),
+      'motdepasse'=>$this->input->post('mdp'),
+    );
+
       $this->load->model('ModelseConnecter');
-      $test = $this->ModelseConnecter->Test_Inscrit($donneeResponsable);
-      if($test['count(*)']==0){
+      $test = $this->ModelseConnecter->Test_Inscrit($donneeConnexion);
+   
+      if($test['count(*)']==0 && $testA['count(*)']==0){
         echo 'Vous n\'êtes pas encore inscrit';
+        if ($this->session->statut==0) // 0 : statut visiteur
+        {
+          redirect('/visiteur/loadAccueil'); // pas les droits : redirection vers connexion
+        }
       }else if ($test['count(*)']==1){
         echo'OK';
         $this->session->statut=1;//1 = Responsable equipe
-        //  if ($this->session->statut==0) // 0 : statut visiteur
-    //  {
-    //    redirect('/visiteur/loadAccueil'); // pas les droits : redirection vers connexion
-    //  }
+        $mail=$this->input->post('mail');
+        $this->load->model('ModelseConnecter');
+        $DonneesInjectees = $this->ModelseConnecter->Recup_noequipe($mail);
+        $this->load->library('table');
         $this->load->view('templates/Entete');
-        $this->load->view('Gestionnaire/participants');
+        $this->load->view('Gestionnaire/participants',$DonneesInjectees); //donnéesinjectées=noequipe
         $this->load->view('Gestionnaire/gestion_course');
         $this->load->view('templates/PiedDePage');
+      }else if ($testA['count(*)']==1){
+        $mail=$this->input->post('mail');
+
+        $this->load->model('ModelseConnecter');
+        $testA = $this->ModelseConnecter->Recup_profilAdmin($mail);
+        $this->session->statut=$resultat;// resultat = profil de l'admin
+
       }else{
         echo 'Erreur';
       }   
@@ -193,10 +211,8 @@ public function recupmdp()
   {
     $mail =  $this->input->post('mail');
     $this->load->model('ModelseConnecter', '', TRUE);
-    //$this->load->model('ModelseConnecter');
     $test = $this->ModelseConnecter->Recup_mdp($mail);
     if ($test['motdepasse']!=null){
-      //$test = $this->ModelseConnecter->Recup_mdp($mail);
       $this->email->from('mailing.randotroll@gmail.com');
       $this->email->to($mail); 
       $this->email->subject('Récupération du mot de passe');
@@ -222,7 +238,9 @@ public function recupmdp()
     }
   }
   else{
+    $this->load->view('templates/Entete');
     $this->load->view('Visiteur/recupmdp');
+    $this->load->view('templates/PiedDePage');
   }
 } // recup mdp
 
@@ -230,7 +248,7 @@ public function seDeconnecter()
 { // destruction de la session = déconnexion
   if ( $this->input->post('deco'))
   {
-    //$this->session->sess_destroy();
+    $this->session->sess_destroy();
     $this->load->view('templates/Entete');
     $this->load->view('Visiteur/seConnecter');
     $this->load->view('templates/PiedDePage');

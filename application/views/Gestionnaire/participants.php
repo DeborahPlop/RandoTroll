@@ -3,7 +3,7 @@
 <?php 
  echo '<div class="container-fluid"><section class="section-inner">';
  //echo '<div class="table-responsive">';
- echo form_open('Gestionnaire/participants');
+ echo form_open('Gestionnaire/gestion_course');
  // echo le nom de l'équipe
  $this->table->set_heading('Nom','Prénom', 'Date de Naissance', 'Sexe', 'Téléphone', 'Mail', 'Repas');  
  $i = 0;
