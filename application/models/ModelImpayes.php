@@ -16,6 +16,7 @@ class ModelImpayes extends CI_Model
         $this->db->join('responsable r','e.nopar_responsable=r.noparticipant');
         $this->db->join('sinscrire s','s.noequipe = e.noequipe');
         $this->db->where('datevalidation', null);
+        $this->db->where('Annee', date('Y'));
         $requete = $this->db->get();
         return $requete->result_array();
         
@@ -84,6 +85,27 @@ class ModelImpayes extends CI_Model
 
     public function updateEquipe($noEquipe,$DonnesAChanger)
     {
+        $this->db->where('noequipe', $noEquipe);
+        $this->db->update('sinscrire',$DonnesAChanger); 
+    }
+
+    public function getEquipesRemboursement()
+    {
+        $this->db->select('*');
+        $this->db->from('equipe e');
+        $this->db->join('participant p ','p.noparticipant=e.nopar_responsable');            
+        $this->db->join('responsable r','e.nopar_responsable=r.noparticipant');
+        $this->db->join('sinscrire s','s.noequipe = e.noequipe');
+        $this->db->where('Annee', date('Y'));
+        $requete = $this->db->get();
+        return $requete->result_array();
+    }
+
+    public function updateRemboursement($DonnéesAUpdate)
+    {
+        //var_dump($DonnéesAUpdate);
+        $noEquipe = $DonnéesAUpdate['noEquipe'];
+        $DonnesAChanger = array('MONTANTREMBOURSE'=>$DonnéesAUpdate['MONTANTREMBOURSE'],);
         $this->db->where('noequipe', $noEquipe);
         $this->db->update('sinscrire',$DonnesAChanger); 
     }

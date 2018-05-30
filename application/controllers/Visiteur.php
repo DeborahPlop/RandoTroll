@@ -16,35 +16,23 @@ class Visiteur extends CI_Controller {
   public function loadAccueil()
   {
     $AnneeEnCours = $this->ModelImpayes->getAnneeEnCours();
-    //var_dump($AnneeEnCours);
 
-    /*
-    
-Select NoEquipe 
-From Sinscrire
-Where Annee = 2018 AND noequipe Not In(
-SELECT `NOEQUIPE` FROM Sinscrire WHERE `DATEVALIDATION` is null)
-
-Select NoEquipe 
-From Sinscrire
-Where Annee = 2018 AND `DATEVALIDATION` is not null
-    */
-    
     $noEquipes = $this->modelSInscrire->getNoEquipesInscrites($AnneeEnCours[0]['ANNEE']);
     //var_dump($noEquipes);
     $somme = 0;
     foreach($noEquipes as $unNoequipe):
       
-      $Infos =array(
-        'NOEQUIPE'=>$unNoequipe['NoEquipe'],
-        'ANNEE'=>$AnneeEnCours[0]['ANNEE'],
-      
-      );
+        $Infos =array(
+          'NOEQUIPE'=>$unNoequipe['NoEquipe'],
+          'ANNEE'=>$AnneeEnCours[0]['ANNEE'],
+        );
+
+
       $nombreMembre=$this->modelSInscrire->getNbMembres($Infos);
       //var_dump($nombreMembre['count(*)']);
       $somme = $somme + $nombreMembre['count(*)'] ;
       //$DateCourse = date_create();($AnneeEnCours[0]['DATECOURSE'],"d/m/Y");
-
+      
     endforeach;
 
     $Données = array(
@@ -53,6 +41,9 @@ Where Annee = 2018 AND `DATEVALIDATION` is not null
       'MaxParticipants'=>$AnneeEnCours[0]['MAXPARTICIPANTS'],
       'nbInscrits'=>$somme,
     );
+
+
+    
 
     //var_dump($Données);
     $this->load->view('templates/Entete');

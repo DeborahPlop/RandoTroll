@@ -12,7 +12,7 @@ echo form_submit('recupmail', 'Envoyer');
 echo'<br>';
 echo("Par SMS : ");
 echo form_submit('sms', 'Envoyer');
-echo '<a href="sInscrire">S\'inscrire ? </a>';
+echo '<a href="'.site_url('Visiteur/sInscrire').'">S\'inscrire ? </a>';
 echo form_close();
 ?>
 </body>

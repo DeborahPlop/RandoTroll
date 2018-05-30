@@ -20,13 +20,13 @@
         $Format_APayer = number_format($A_Payer, 2);
         $Format_Du = number_format($Somme[$i][1], 2);
         $numEquipe =$uneEquipe['NOEQUIPE'];
-        $this->table->add_row($numEquipe,$uneEquipe['NOMEQUIPE'],$uneEquipe['PRENOM']." ".$uneEquipe['NOM'],$uneEquipe['TELPORTABLE'],$uneEquipe['MAIL'],$Format_Du." €",$Format_APayer." €",$uneEquipe['MODEREGLEMENT'],'<a href="http://localhost/Randotroll/index.php/AdminInscription//MiseAJourImpayes/'.($numEquipe).'" class="btn btn-default" > Modifier </a>'); 
+        $this->table->add_row($numEquipe,$uneEquipe['NOMEQUIPE'],$uneEquipe['PRENOM']." ".$uneEquipe['NOM'],$uneEquipe['TELPORTABLE'],$uneEquipe['MAIL'],$Format_Du." €",$Format_APayer." €",$uneEquipe['MODEREGLEMENT'],'<a href="'.site_url('AdminInscription//MiseAJourImpayes/'.($numEquipe).'"').' class="btn btn-default" > Modifier </a>'); 
         $i += 1 ;
 
        // echo '<a href="http://localhost/Randotroll/index.php/AdminInscription//MiseAJourImpayes/'.($numEquipe).'"> coucou </a>';
         
         //echo form_close();  
-        endforeach  ;
+    endforeach  ;
     $Style = array('table_open' => '<table class="table" style="color:#CBCBCB">');
     $this->table->set_template($Style);
     

@@ -11,10 +11,11 @@
                         <?php
                         echo'<H1 align = "center" style="color:#EAF815">Connexion</H1><BR>';
                         echo validation_errors(); // mise en place de la validation
-                        /* set_value : en cas de non validation les données déjà
-                        saisies sont réinjectées dans le formulaire */
+                            /* set_value : en cas de non validation les données déjà
+                            saisies sont réinjectées dans le formulaire */
                         $blanc=array('style'=>'color:#CBCBCB');
-                        echo form_open('Visiteur/seConnecter');
+                        
+                        echo form_open('visiteur/seConnecter');
                         echo form_label('Mail : ','mail',$blanc); // creation d'un label devant la zone de saisie
                         echo form_input('mail','',array('required'=>'required'));
                         echo' ';
@@ -23,10 +24,11 @@
                         echo' ';
                         echo form_submit('submit', 'Se connecter');
                         echo' ';
-                        echo '<a href="recupmdp">Mot de passe oublié ?</a>';
+                        echo '<a href="'.site_url('Visiteur/recupmdp').'">Mot de passe oublié ?</a>';
                         echo form_close();
 
-                        echo '<a href="sInscrire">S\'inscrire ? </a>';
+                        echo '<a href="'.site_url('Visiteur/sInscrire').'">S\'inscrire ? </a>';
+                        
                         ?>
                     </div>
                 </section>
