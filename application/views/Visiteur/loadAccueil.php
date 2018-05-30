@@ -1,5 +1,5 @@
 <html>
-<<<<<<< HEAD
+
 
     <body>
         <H1 align = "center" style="color:#EAF815">Bienvenue sur RandoTroll !</H1>
@@ -17,8 +17,17 @@
             <div class="col-sm-3">
                 <section >
                     <div class = "section-inner" style="background-color:#00021A;padding:20px">
-                        <H4 style="color:#CBCBCB">j-X suivant la date de la course</H4>
-                        <H4 style="color:#CBCBCB">Plus que X place = 700 - les deja inscrits</H4>
+                        <div class="text-sm-left">
+                        <?php
+                            $Aujourd_hui = date('Y/m/d');
+                            
+                            $nbJours= date_diff(date_create($DateCourse),date_create($Aujourd_hui))->days;
+                            // var_dump($nbJours);
+                            echo'
+                            <H4 style="color:#CBCBCB">J-'.$nbJours  .' avant la course</H4>
+                            <H4 style="color:#CBCBCB">'.($MaxParticipants-$nbInscrits) .' places restantes </H4>';
+                        ?>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -38,4 +47,4 @@
             </div>
         </div>
     </body>
-=======
+

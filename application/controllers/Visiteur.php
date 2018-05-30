@@ -1,30 +1,68 @@
 <?php
 
 class Visiteur extends CI_Controller {
-   public function __construct()
-   {
-      parent::__construct();
-      $this->load->helper('url');
-      $this->load->helper('assets'); // helper 'assets' ajouté a Application
-      $this->load->library("pagination");
-      $this->load->library('email');
-      //$this->load->model('modelSInscrire');
-      $this->load->library('session');
-   } // __construct
+  public function __construct()
+  {
+    parent::__construct();
+    $this->load->helper('url');
+    $this->load->helper('assets'); // helper 'assets' ajouté a Application
+    $this->load->library("pagination");
+    $this->load->library('email');
+    $this->load->model('modelSInscrire');
+    $this->load->model('ModelImpayes');
+    $this->load->library('session');
+  } // __construct
 
-   public function loadAccueil()
-   {
-     $this->load->view('templates/Entete');
-     
-     //$this->load->view('Visiteur/seConnecter'); // Pense peut être à le rajouter dans ma bare de menu ? 
-     
-     $this->load->view('Visiteur/loadAccueil');
-     
-     $this->load->view('templates/PiedDePage');
-   }
+  public function loadAccueil()
+  {
+    $AnneeEnCours = $this->ModelImpayes->getAnneeEnCours();
+    //var_dump($AnneeEnCours);
 
-   public function sInscrire()
-   {
+    /*
+    
+Select NoEquipe 
+From Sinscrire
+Where Annee = 2018 AND noequipe Not In(
+SELECT `NOEQUIPE` FROM Sinscrire WHERE `DATEVALIDATION` is null)
+
+Select NoEquipe 
+From Sinscrire
+Where Annee = 2018 AND `DATEVALIDATION` is not null
+    */
+    
+    $noEquipes = $this->modelSInscrire->getNoEquipesInscrites($AnneeEnCours[0]['ANNEE']);
+    //var_dump($noEquipes);
+    $somme = 0;
+    foreach($noEquipes as $unNoequipe):
+      
+      $Infos =array(
+        'NOEQUIPE'=>$unNoequipe['NoEquipe'],
+        'ANNEE'=>$AnneeEnCours[0]['ANNEE'],
+      
+      );
+      $nombreMembre=$this->modelSInscrire->getNbMembres($Infos);
+      //var_dump($nombreMembre['count(*)']);
+      $somme = $somme + $nombreMembre['count(*)'] ;
+      //$DateCourse = date_create();($AnneeEnCours[0]['DATECOURSE'],"d/m/Y");
+
+    endforeach;
+
+    $Données = array(
+      'AnneEnCours'=>$AnneeEnCours[0]['ANNEE'],
+      'DateCourse'=>$AnneeEnCours[0]['DATECOURSE'],
+      'MaxParticipants'=>$AnneeEnCours[0]['MAXPARTICIPANTS'],
+      'nbInscrits'=>$somme,
+    );
+
+    //var_dump($Données);
+    $this->load->view('templates/Entete');
+    //$this->load->view('Visiteur/seConnecter'); // Pense peut être à le rajouter dans ma bare de menu ? 
+    $this->load->view('Visiteur/loadAccueil',$Données);
+    $this->load->view('templates/PiedDePage');
+  }//fin loadAcceuil
+
+  public function sInscrire()
+  {
      $DonneesInjectees['Titre de la page']='Inscription';
      if ( $this->input->post('valider'))
      {
@@ -148,94 +186,96 @@ class Visiteur extends CI_Controller {
        $this->load->view('Visiteur/sInscrire',$DonneesInjectees);
        $this->load->view('templates/PiedDePage');
      }
-   }// fin function
+  }// fin function
   
-
   public function seConnecter()
-{
-  $this->session->statut=0;// 0 Visiteur
-  $DonneesInjectees['Titre de la page']='Connexion';
-  if ( $this->input->post('submit'))
   {
-     $donneeResponsable=array(
-       'mail'=>$this->input->post('mail'),
-       'motdepasse'=>$this->input->post('mdp'),
-      );
-      $this->load->model('ModelseConnecter');
-      $test = $this->ModelseConnecter->Test_Inscrit($donneeResponsable);
-      if($test['count(*)']==0){
-        echo 'Vous n\'êtes pas encore inscrit';
-      }else if ($test['count(*)']==1){
-        echo'OK';
-        $this->session->statut=1;//1 = Responsable equipe
-        //  if ($this->session->statut==0) // 0 : statut visiteur
-    //  {
-    //    redirect('/visiteur/loadAccueil'); // pas les droits : redirection vers connexion
-    //  }
-        $this->load->view('templates/Entete');
-        $this->load->view('Gestionnaire/participants');
-        $this->load->view('Gestionnaire/gestion_course');
-        $this->load->view('templates/PiedDePage');
-      }else{
-        echo 'Erreur';
-      }   
-  }else{
-    $this->load->view('templates/Entete');
-    $this->load->view('Visiteur/seConnecter',$DonneesInjectees);
-    $this->load->view('templates/PiedDePage');
-  }
-}// seConnecter
-
-public function recupmdp()
-{
-  
-  if ( $this->input->post('recupmail'))
-  {
-    $mail =  $this->input->post('mail');
-    $this->load->model('ModelseConnecter', '', TRUE);
-    //$this->load->model('ModelseConnecter');
-    $test = $this->ModelseConnecter->Recup_mdp($mail);
-    if ($test['motdepasse']!=null){
-      //$test = $this->ModelseConnecter->Recup_mdp($mail);
-      $this->email->from('mailing.randotroll@gmail.com');
-      $this->email->to($mail); 
-      $this->email->subject('Récupération du mot de passe');
-      $this->email->message("Voici votre mot de passe : ".$test['motdepasse']);
-      
-      if (!$this->email->send())
+      $this->session->statut=0;// 0 Visiteur
+      $DonneesInjectees['Titre de la page']='Connexion';
+      if ( $this->input->post('submit'))
       {
-          $this->email->print_debugger();
-          echo "Error";
+        $donneeResponsable=array(
+          'mail'=>$this->input->post('mail'),
+          'motdepasse'=>$this->input->post('mdp'),
+          );
+          $this->load->model('ModelseConnecter');
+          $test = $this->ModelseConnecter->Test_Inscrit($donneeResponsable);
+          if($test['count(*)']==0){
+            echo 'Vous n\'êtes pas encore inscrit';
+          }else if ($test['count(*)']==1){
+            echo'OK';
+            $this->session->statut=1;//1 = Responsable equipe
+            //  if ($this->session->statut==0) // 0 : statut visiteur
+        //  {
+        //    redirect('/visiteur/loadAccueil'); // pas les droits : redirection vers connexion
+        //  }
+            $this->load->view('templates/Entete');
+            $this->load->view('Gestionnaire/participants');
+            $this->load->view('Gestionnaire/gestion_course');
+            $this->load->view('templates/PiedDePage');
+          }else{
+            echo 'Erreur';
+          }   
+      }else{
+      $this->load->view('templates/Entete');
+      $this->load->view('Visiteur/seConnecter',$DonneesInjectees);
+      $this->load->view('templates/PiedDePage');
+    }
+  }// seConnecter
+ 
+  public function recupmdp()
+  {
+    
+    if ( $this->input->post('recupmail'))
+    {
+      $mail =  $this->input->post('mail');
+      $this->load->model('ModelseConnecter', '', TRUE);
+      //$this->load->model('ModelseConnecter');
+      $test = $this->ModelseConnecter->Recup_mdp($mail);
+      if ($test['motdepasse']!=null){
+        //$test = $this->ModelseConnecter->Recup_mdp($mail);
+        $this->email->from('mailing.randotroll@gmail.com');
+        $this->email->to($mail); 
+        $this->email->subject('Récupération du mot de passe');
+        $this->email->message("Voici votre mot de passe : ".$test['motdepasse']);
+        
+        if (!$this->email->send())
+        {
+            $this->email->print_debugger();
+            echo "Error";
+        }
+        else
+        {
+          $this->load->view('templates/Entete');
+          $this->load->view('Visiteur/seConnecter');
+          $this->load->view('templates/PiedDePage');
+          //echo 'mail envoyé';
+        }
       }
       else
       {
-        $this->load->view('templates/Entete');
-        $this->load->view('Visiteur/seConnecter');
-        $this->load->view('templates/PiedDePage');
-        //echo 'mail envoyé';
+        echo 'vous n\'êtes pas encore inscrit';
+
       }
     }
-    else
-    {
-      echo 'vous n\'êtes pas encore inscrit';
-
+    else{
+      $this->load->view('Visiteur/recupmdp');
     }
-  }
-  else{
-    $this->load->view('Visiteur/recupmdp');
-  }
-} // recup mdp
+  } // recup mdp
 
-public function seDeconnecter() 
-{ // destruction de la session = déconnexion
-  if ( $this->input->post('deco'))
-  {
-    //$this->session->sess_destroy();
-    $this->load->view('templates/Entete');
-    $this->load->view('Visiteur/seConnecter');
-    $this->load->view('templates/PiedDePage');
-  }
-}// deconnexion
+  public function seDeconnecter() 
+  { // destruction de la session = déconnexion
+    if ( $this->input->post('deco'))
+    {
+      //$this->session->sess_destroy();
+      $this->load->view('templates/Entete');
+      $this->load->view('Visiteur/seConnecter');
+      $this->load->view('templates/PiedDePage');
+    }
+  }// deconnexion
+
+  
+
 
 }  // Visiteur
 
